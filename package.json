@@ -1,0 +1,34 @@
+{
+  "name": "learn_webgpu",
+  "version": "1.0.0",
+  "description": "Some records I learn webgpu",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kaiguzaibuzai/learn_webgpu.git"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "./tools/.eslintrc.cjs"
+    ],
+    "plugins": [
+      "html"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kaiguzaibuzai/learn_webgpu/issues"
+  },
+  "homepage": "https://github.com/Kaiguzaibuzai/learn_webgpu#readme",
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-plugin-html": "^7.1.0"
+  }
+}
