@@ -1,12 +1,8 @@
-const sayHello = () => {
-	console.log('hello!');
-}
-
 const initWebGPU = async () => {
 	console.log(navigator);
 
 	if (!navigator) {
-		throw new Error('Your browser not support webgpu!');	// console + return
+		throw new Error('Your browser not support webgpu!');
 	}
 
 	// get adapter
@@ -15,7 +11,7 @@ const initWebGPU = async () => {
 	});
 
 	if (!adapter) {
-		throw new Error('No adapter');	// console + return
+		throw new Error('No adapter');
 	}
 
 	// get device
@@ -25,10 +21,6 @@ const initWebGPU = async () => {
 }
 
 const initRenderTarget  = (device) => {
-// 这些算是背景了
-
-	// const canvas = document.getElementById('webGpuCanvas');
-
 	let width = window.innerWidth || 2;
 	let height = window.innerHeight || 2;
 
@@ -39,10 +31,6 @@ const initRenderTarget  = (device) => {
 
 	const context = canvas.getContext('webgpu');
 
-	// const devicePixelRatio = window.devicePixelRatio || 1;
-	// canvas.width = canvas.clientWidth * devicePixelRatio;
-	// canvas.height = canvas.clientHeight * devicePixelRatio;
-
 	// Return the preferred GPUTextureFormat for displaying 8-bit depth, standard dynamic range content on this system.
 	const format = navigator.gpu.getPreferredCanvasFormat ? navigator.gpu.getPreferredCanvasFormat() : context.getPreferredFormat(adapter);
 
@@ -51,7 +39,7 @@ const initRenderTarget  = (device) => {
 	context.configure({
 		device,
 		// format,
-		format: 'bgra8unorm',
+		format: format,  // 'bgra8unorm'
 		usage: GPUTextureUsage.RENDER_ATTACHMENT, // ！！
 		alphaModeL: 'opaque'
 	});
@@ -63,7 +51,7 @@ const initRenderTarget  = (device) => {
 			depthOrArrayLayers: 1
 		},
 		sampleCount: 4, 	// for antialias
-		format: 'bgra8unorm',
+		format: format, // 'bgra8unorm'
 		usage: GPUTextureUsage.RENDER_ATTACHMENT
 	});
 
@@ -87,12 +75,12 @@ const initRenderTarget  = (device) => {
 	const colorAttachments = [{
 		view: colorView,
 		resolveTarget: resolveTarget,
-		clearValue: { r: 0, g: 0, b: 0, a: 0 },			// 一会看看这些都是干什么的
+		clearValue: { r: 0, g: 0, b: 0, a: 0 },
 		loadOp: 'clear',
 		storeOp: 'store'
 	}];
 
-	const depthStencilAttachment = {					// 一会也看看
+	const depthStencilAttachment = {
 		view: depthView,
 		depthClearValue: 1,
 		depthLoadOp: 'clear',
@@ -107,13 +95,11 @@ const initRenderTarget  = (device) => {
 		depthStencilAttachment
 	}
 
-	return { context, format, renderPassDescriptor }
+	return { renderPassDescriptor }
 }
 
-const draw = (device, pipeLine) => {
+const draw = (device, renderPassDescriptor) => {
 	// different begin end
-
-	const { context, format, renderPassDescriptor } = initRenderTarget(device);
 
 	// begin encoder
 
@@ -131,10 +117,9 @@ const draw = (device, pipeLine) => {
 const run = async () => {
 	const { device } = await initWebGPU();
 
-	// initRenderTarget(device);
+	const { renderPassDescriptor } = initRenderTarget(device);
 
-	draw(device);
-	// const pipeLine = await			// pipeLine 应该用不到
+	draw(device, renderPassDescriptor);
 }
 
 export { run }
